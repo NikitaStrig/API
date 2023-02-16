@@ -1,15 +1,16 @@
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
 
     public static void main(String[] args) {
-        List<Integer> integerList = Arrays.asList(1,2,3,4,5,6,7,8,9);
+        List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
         List<Integer> integerListD = Arrays.asList();
 
- // ------Задание 2-------
+        // ------Задание 2-------
         List<Integer> integerListC = integerList.stream()
                 .filter(number -> number % 2 == 0)
                 .collect(Collectors.toList());
@@ -19,11 +20,23 @@ public class Main {
 
 //------Задание 1---
         System.out.println("Вариант 1");
-        findMinMax1(integerList.stream(),integerList.stream(),Integer::compareTo, (min, max) -> System.out.println("MIN: " +min.get() +"\n"+"MAX: "+ max.get()));
+        findMinMax1(integerList.stream(), integerList.stream(), Integer::compareTo, (min, max) -> System.out.println("MIN: " + min.get() + "\n" + "MAX: " + max.get()));
         System.out.println("Вариант 2");
-        findMinMax(integerList.stream(),Integer::compareTo, (min, max) -> System.out.println("MIN: " + min +"\n"+"MAX: "+ max));
+        findMinMax(integerList.stream(), Integer::compareTo, (min, max) -> System.out.println("MIN: " + min + "\n" + "MAX: " + max));
+//--------------------------
+        System.out.println("Курсовик 2");
+        String sentence = "Шла Саша саша по саша и шла как шла";
 
+        List<String> words = new ArrayList<>();
+        for (String s : sentence.split(" ")) {
+            words.add(s.replaceAll("[^a-zA-Zа-яёА-ЯЁ]", "").toLowerCase());
+        }
+
+        Map<String, Long> frequency = countDuplicates(words);
+        System.out.println(frequency);
     }
+
+
     public static void findMinMax1(
             Stream<Integer> stream,
             Stream<Integer> stream2,
@@ -31,11 +44,12 @@ public class Main {
             BiConsumer<Optional<Integer>, Optional<Integer>> minMaxConsumer) {
 
 
-        Optional<Integer> min =  stream.min(order);
+        Optional<Integer> min = stream.min(order);
         Optional<Integer> max = stream2.max(order);
 
-        minMaxConsumer.accept(min,max);
+        minMaxConsumer.accept(min, max);
     }
+
     public static <S> void findMinMax(
             Stream<? extends S> stream,
             Comparator<? super S> order,
@@ -52,4 +66,8 @@ public class Main {
         minMaxConsumer.accept(minS, maxS);
     }
 
-}
+         public static Map<String, Long> countDuplicates(List<String> inputList) {
+ return inputList.stream().collect(Collectors.toMap(Function.identity(), v -> 1L, Long::sum));
+ }
+    }
+
